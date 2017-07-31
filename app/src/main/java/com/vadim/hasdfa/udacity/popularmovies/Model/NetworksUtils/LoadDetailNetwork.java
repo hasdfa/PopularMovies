@@ -2,11 +2,12 @@ package com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.vadim.hasdfa.udacity.popularmovies.Controllers.DetailMovie.SecondItemAdapter;
 import com.vadim.hasdfa.udacity.popularmovies.Model.Movie;
 import com.vadim.hasdfa.udacity.popularmovies.Model.MovieDetail;
-import com.vadim.hasdfa.udacity.popularmovies.Model.Review;
-import com.vadim.hasdfa.udacity.popularmovies.Model.Videos;
+import com.vadim.hasdfa.udacity.popularmovies.Model.SecondItem;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -25,12 +27,14 @@ import static com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.TheMovi
 public class LoadDetailNetwork extends AsyncTask<Movie, Void, MovieDetail> {
     private LoadDetailNetwork() {}
 
-    public static LoadDetailNetwork shared() {
+    public static LoadDetailNetwork shared(){
         return new LoadDetailNetwork();
     }
 
-    public static void load(Movie movie){
-        LoadDetailNetwork.shared().execute(movie);
+    private SecondItemAdapter mAdapter;
+    public void load(Movie movie, SecondItemAdapter mAdapter){
+        this.mAdapter = mAdapter;
+        execute(movie);
     }
 
     @Override
@@ -44,76 +48,86 @@ public class LoadDetailNetwork extends AsyncTask<Movie, Void, MovieDetail> {
             URL url1 = new URL(Uri.parse(base + TheMoviewDBAPI.videos(movieDetail.getMovie().getId())).buildUpon()
                     .appendQueryParameter("api_key", key)
                     .toString());
-            URL url2 = new URL(Uri.parse(base + TheMoviewDBAPI.videos(movieDetail.getMovie().getId())).buildUpon()
+            URL url2 = new URL(Uri.parse(base + TheMoviewDBAPI.reviews(movieDetail.getMovie().getId())).buildUpon()
                     .appendQueryParameter("api_key", key)
                     .toString());
 
 
-            HttpURLConnection[] connections = new HttpURLConnection[]{
-                    (HttpsURLConnection) url1.openConnection(),
-                    (HttpsURLConnection) url2.openConnection()
-            };
-            for (HttpURLConnection connection: connections) {
-                try {
-                    InputStream in = connection.getInputStream();
+            HttpURLConnection connection1 = (HttpsURLConnection) url1.openConnection();
+            HttpURLConnection connection2 = (HttpsURLConnection) url2.openConnection();
+            try {
+                InputStream in = connection1.getInputStream();
 
-                    Scanner scanner = new Scanner(in);
-                    scanner.useDelimiter("\\A");
+                Scanner scanner = new Scanner(in);
+                scanner.useDelimiter("\\A");
 
-                    boolean hasInput = scanner.hasNext();
-                    if (hasInput) {
-                        if (resultVideosJson.equals("")) {
-                            resultVideosJson = scanner.next();
-                        } else if (resultReviewJson.equals("")) {
-                            resultReviewJson = scanner.next();
-                        }
-                    }
-                } finally {
-                    connection.disconnect();
+                boolean hasInput = scanner.hasNext();
+                if (hasInput) {
+                    resultVideosJson = scanner.next();
                 }
+            } finally {
+                connection1.disconnect();
+            }
+            try {
+                InputStream in = connection2.getInputStream();
+
+                Scanner scanner = new Scanner(in);
+                scanner.useDelimiter("\\A");
+
+                boolean hasInput = scanner.hasNext();
+                if (hasInput) {
+                    resultReviewJson = scanner.next();
+                }
+            } finally {
+                connection2.disconnect();
             }
 
 
+            movieDetail.setSecondItems(new ArrayList<SecondItem>());
             if (resultVideosJson != null) {
                 JSONArray array = new JSONObject(resultVideosJson).getJSONArray("results");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    Videos video = new Videos();
-                    video.setId(obj.getString("id"));
-                    video.setIso_639_1(obj.getString("iso_639_1"));
-                    video.setIso_3166_1(obj.getString("iso_3166_1"));
-                    video.setKey(obj.getString("key"));
-                    video.setName(obj.getString("name"));
-                    video.setSite(obj.getString("site"));
-                    video.setSize(obj.getString("site"));
-                    video.setType(obj.getString("type"));
+                    SecondItem secondItem = new SecondItem();
+                    secondItem.setId(obj.getString("id"));
+                    secondItem.setIso_639_1(obj.getString("iso_639_1"));
+                    secondItem.setIso_3166_1(obj.getString("iso_3166_1"));
+                    secondItem.setKey(obj.getString("key"));
+                    secondItem.setName(obj.getString("name"));
+                    secondItem.setSite(obj.getString("site"));
+                    secondItem.setSize(obj.getString("site"));
+                    secondItem.setType(obj.getString("type"));
 
-                    movieDetail.getVideos().add(video);
+                    secondItem.itemType = 0;
+                    movieDetail.getSecondItems().add(secondItem);
                 }
             }
             if (resultReviewJson != null) {
+                Log.d("myLog", resultReviewJson);
                 JSONArray array = new JSONObject(resultReviewJson).getJSONArray("results");
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    Review review = new Review();
+                    SecondItem review = new SecondItem();
                     review.setId(obj.getString("id"));
                     review.setAuthor(obj.getString("author"));
                     review.setContent(obj.getString("content"));
                     review.setUrl(obj.getString("url"));
 
-                    movieDetail.getReviews().add(review);
+                    review.itemType = 1;
+                    movieDetail.getSecondItems().add(review);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return movieDetail;
     }
 
     @Override
     protected void onPostExecute(MovieDetail movieDetail) {
         super.onPostExecute(movieDetail);
-
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged(movieDetail.getSecondItems());
+        }
     }
 }

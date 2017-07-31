@@ -4,7 +4,10 @@ package com.vadim.hasdfa.udacity.popularmovies.Model;
  * Created by Raksha Vadim on 30.07.17, 21:50.
  */
 
-public class Videos {
+public class SecondItem {
+    public int itemType = -1;
+
+
     private String id;
     private String iso_639_1;
     private String iso_3166_1;
@@ -13,19 +16,33 @@ public class Videos {
     private String site;
     private String size;
     private String type;
+    private String author;
+    private String content;
+    private String url;
 
-    /*
-    {
-      "id": "533ec654c3a36854480003eb",
-      "iso_639_1": "en",
-      "iso_3166_1": "US",
-      "key": "SUXWAEX2jlg",
-      "name": "Trailer 1",
-      "site": "YouTube",
-      "size": 720,
-      "type": "Trailer"
+    public String getAuthor() {
+        return author;
     }
-    */
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public String getId() {
         return id;

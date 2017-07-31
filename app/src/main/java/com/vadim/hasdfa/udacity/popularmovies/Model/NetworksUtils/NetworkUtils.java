@@ -26,7 +26,7 @@ import static com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.TheMovi
  */
 
 public class NetworkUtils extends AsyncTask<URL, Void, ArrayList<Movie>>{
-    MoviesAdapter mAdapter;
+    private MoviesAdapter mAdapter;
 
     public NetworkUtils(MoviesAdapter mAdapter) {
         this.mAdapter = mAdapter;

@@ -13,4 +13,5 @@
     <string name="favorite_icon">favorite icon</string>
     <string name="isfavorite">isFavorite</string>
     <string name="favorites">Favorites</string>
+    <string name="play_button">play button</string>
 </resources>

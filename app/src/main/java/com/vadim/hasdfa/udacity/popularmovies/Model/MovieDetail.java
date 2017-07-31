@@ -8,8 +8,7 @@ import java.util.ArrayList;
 
 public class MovieDetail {
     private Movie movie;
-    private ArrayList<Review> reviews;
-    private ArrayList<Videos> videos;
+    private ArrayList<SecondItem> secondItems;
 
     public Movie getMovie() {
         return movie;
@@ -19,19 +18,11 @@ public class MovieDetail {
         this.movie = movie;
     }
 
-    public ArrayList<Review> getReviews() {
-        return reviews;
+    public ArrayList<SecondItem> getSecondItems() {
+        return secondItems;
     }
 
-    public void setReviews(ArrayList<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public ArrayList<Videos> getVideos() {
-        return videos;
-    }
-
-    public void setVideos(ArrayList<Videos> videos) {
-        this.videos = videos;
+    public void setSecondItems(ArrayList<SecondItem> secondItems) {
+        this.secondItems = secondItems;
     }
 }

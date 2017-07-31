@@ -2,6 +2,8 @@ package com.vadim.hasdfa.udacity.popularmovies.Controllers.DetailMovie;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.vadim.hasdfa.udacity.popularmovies.Model.DataBase.MovieDBController;
 import com.vadim.hasdfa.udacity.popularmovies.Model.Movie;
+import com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.LoadDetailNetwork;
 import com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.TheMoviewDBAPI;
 import com.vadim.hasdfa.udacity.popularmovies.Model.UserData;
 import com.vadim.hasdfa.udacity.popularmovies.R;
@@ -36,6 +39,9 @@ public class MoviewDetailActivity extends AppCompatActivity {
     @BindView(R.id.favorite_button) View favoriteButton;
     @BindView(R.id.favorite_image_view) ImageView favoriteImage;
     @BindView(R.id.favorite_text_view) TextView favoriteTextView;
+
+    @BindView(R.id.mRecyclerView) RecyclerView mRecyclerView;
+    SecondItemAdapter mSecondItemAdapter;
 
     Movie currentMoview = UserData.movie;
 
@@ -80,7 +86,17 @@ public class MoviewDetailActivity extends AppCompatActivity {
         }
         reloadView();
         reloadFavoriteLocal();
+
+        mSecondItemAdapter = new SecondItemAdapter(this);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mSecondItemAdapter);
+        mRecyclerView.setNestedScrollingEnabled(false);
+
+        LoadDetailNetwork.shared()
+                .load(currentMoview, mSecondItemAdapter);
     }
+
 
     private void reloadFavoriteLocal() {
         if (currentMoview.isFavorite()) {
