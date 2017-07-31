@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Movies.db";
-    private static final int DATABASE_VERSION = 5;
+    private static int DATABASE_VERSION = 8;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,7 +25,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  \"title\" text NOT NULL,\n" +
                 "  \"isFavorite\" integer NOT NULL default 0,\n"+
                 "  \"poster_url\" text NOT NULL,\n" +
+                "  \"blur_poster_url\" text NOT NULL,\n" +
                 "  \"overview\" text NOT NULL,\n" +
+                "  \"rate\" text NOT NULL,\n" +
                 "  \"date\" text NOT NULL\n" +
                 ");");
     }
