@@ -52,6 +52,11 @@ public class MoviewDetailActivity extends AppCompatActivity {
                 supportFinishAfterTransition();
             }
         });
+        loadView();
+        dbController = new MovieDBController();
+    }
+
+    private void loadView(){
         Picasso.with(MoviewDetailActivity.this)
                 .load(TheMoviewDBAPI.baseImage + currentMoview.getPosterPath())
                 .into(poster);
@@ -63,15 +68,14 @@ public class MoviewDetailActivity extends AppCompatActivity {
         date.setText(currentMoview.getReleaseDate());
         rate.setText(currentMoview.getVoteAverage()+"");
         overview.setText(currentMoview.getOverview());
-
-        dbController = new MovieDBController()
-                .beginDataBaseQuery(this)
-                .endDataBaseQuery();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        currentMoview = UserData.movie;
+        if (!currentMoview.equals(UserData.movie)) {
+            currentMoview = UserData.movie;
+            loadView();
+        }
     }
 }
