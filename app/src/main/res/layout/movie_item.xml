@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:targetApi="lollipop" >
+
+        <ImageView
+            android:id="@+id/thumbnail_image_view"
+            android:transitionName="posterTransition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/movie_image"
+            tools:src="@drawable/deadpool_example"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/title_text_view"
+            android:transitionName="titleTransition"
+            android:textStyle="bold"
+            android:ellipsize="end"
+            android:layout_below="@id/thumbnail_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:paddingStart="8dp"
+            android:paddingRight="8dp"
+            android:paddingEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="21sp"
+            tools:text="Deadpool" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:transitionName="rateImageTransition"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_width="24dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title_text_view"
+            android:paddingBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/star_icon"
+            app:srcCompat="@drawable/ic_star" />
+
+        <TextView
+            android:id="@+id/rate_text_view"
+            android:transitionName="rateTextTransition"
+            android:layout_toStartOf="@id/imageView2"
+            android:gravity="center"
+            android:layout_below="@id/title_text_view"
+            android:layout_alignParentBottom="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="21sp"
+            tools:text="10" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

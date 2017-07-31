@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Popular Movies</string>
+    <string name="movie_image">Movie Image</string>
+    <string name="star_icon">Star icon</string>
+    <string name="calendar_icon">Calendar icon</string>
+    <string name="sort">Sort</string>
+    <string name="top_rated">Top rated</string>
+    <string name="popular">Popular</string>
+    <string name="bluredbackground">bluredBackground</string>
+    <string name="backbutton">backButton</string>
+    <string name="toolbar">toolbar</string>
+</resources>
