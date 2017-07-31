@@ -9,4 +9,8 @@
     <string name="bluredbackground">bluredBackground</string>
     <string name="backbutton">backButton</string>
     <string name="toolbar">toolbar</string>
+    <string name="add_to_favorite">Add to favorite</string>
+    <string name="favorite_icon">favorite icon</string>
+    <string name="isfavorite">isFavorite</string>
+    <string name="favorites">Favorites</string>
 </resources>

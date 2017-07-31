@@ -18,24 +18,35 @@ public class Movie {
     private int voteCount;
     private String video;
     private double voteAverage;
+    private boolean isFavorite = false;
 
     @Override
     public boolean equals(Object obj) {
         Movie m = (Movie) obj;
-        return
-                this.posterPath.equals(m.posterPath) &&
-                this.adult == m.adult &&
-                this.overview.equals(m.overview) &&
-                this.releaseDate.equals(m.releaseDate) &&
-                this.id == m.id &&
-                this.originalTitle.equals(m.originalTitle) &&
-                this.originalLanguage.equals(m.originalLanguage) &&
-                this.title.equals(m.title) &&
-                this.backdropPath.equals(m.backdropPath) &&
-                this.popularity == m.popularity &&
-                this.voteCount == m.voteCount &&
-                this.video.equals(m.video) &&
-                this.voteAverage == m.voteAverage;
+        boolean isEqual = false;
+        try {
+            isEqual = this.posterPath.equals(m.posterPath) &&
+                    this.adult == m.adult &&
+                    this.overview.equals(m.overview) &&
+                    this.releaseDate.equals(m.releaseDate) &&
+                    this.id == m.id &&
+                    this.originalTitle.equals(m.originalTitle) &&
+                    this.originalLanguage.equals(m.originalLanguage) &&
+                    this.title.equals(m.title) &&
+                    this.backdropPath.equals(m.backdropPath) &&
+                    this.popularity == m.popularity &&
+                    this.voteCount == m.voteCount &&
+                    this.video.equals(m.video) &&
+                    this.voteAverage == m.voteAverage;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isEqual;
+    }
+
+    @Override
+    public String toString() {
+        return title;
     }
 
     public String getPosterPath() {
@@ -140,5 +151,13 @@ public class Movie {
 
     public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

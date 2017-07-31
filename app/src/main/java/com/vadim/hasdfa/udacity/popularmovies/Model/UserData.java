@@ -10,6 +10,7 @@ public class UserData {
     public static Movie movie;
     public enum SortType {
         topRated,
-        popular
+        popular,
+        favorite
     }
 }

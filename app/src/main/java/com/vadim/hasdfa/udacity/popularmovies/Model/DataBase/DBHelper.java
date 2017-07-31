@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "Movies.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -23,15 +23,16 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  \"_id\" integer PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
                 "  \"movie_id\" integer NOT NULL,\n" +
                 "  \"title\" text NOT NULL,\n" +
-                "  \"poster_url\" text,\n" +
-                "  \"overview\" text,\n" +
-                "  \"date\" text\n" +
+                "  \"isFavorite\" integer NOT NULL default 0,\n"+
+                "  \"poster_url\" text NOT NULL,\n" +
+                "  \"overview\" text NOT NULL,\n" +
+                "  \"date\" text NOT NULL\n" +
                 ");");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS FavoriteMovies");
         onCreate(db);
     }
 }

@@ -2,20 +2,30 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="@string/sort"
+        android:id="@+id/sort_main"
         android:icon="@drawable/ic_sort"
-        app:showAsAction="always"
-        android:id="@+id/sort_main">
+        android:title="@string/sort"
+        app:showAsAction="always">
         <menu>
             <item
-                android:checked="true"
+                android:id="@+id/sort_popular"
                 android:checkable="true"
+                android:checked="true"
+                android:icon="@drawable/ic_star"
                 android:title="@string/popular"
-                android:id="@+id/sort_popular"/>
+                app:showAsAction="collapseActionView" />
             <item
+                android:id="@+id/sort_topRated"
                 android:checkable="true"
                 android:title="@string/top_rated"
-                android:id="@+id/sort_topRated"/>
+                android:icon="@drawable/ic_swap_vert"
+                app:showAsAction="collapseActionView"/>
+            <item
+                android:id="@+id/list_favorite"
+                android:checkable="true"
+                android:icon="@drawable/ic_favorite_primary"
+                android:title="@string/favorites"
+                app:showAsAction="collapseActionView" />
         </menu>
     </item>
 </menu>

@@ -15,6 +15,8 @@ import com.vadim.hasdfa.udacity.popularmovies.Model.UserData;
 import com.vadim.hasdfa.udacity.popularmovies.R;
 import com.vadim.hasdfa.udacity.popularmovies.utils.Blur;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -28,13 +30,14 @@ public class MoviewDetailActivity extends AppCompatActivity {
     @BindView(R.id.date_text_view) TextView date;
     @BindView(R.id.overview_text_view) TextView overview;
     @BindView(R.id.rate_text_view) TextView rate;
-
     @BindView(R.id.backArrow) ImageButton backButton;
     @BindView(R.id.blured_image_view) ImageView blured;
     @BindView(R.id.poster_image_view) ImageView poster;
+    @BindView(R.id.favorite_button) View favoriteButton;
+    @BindView(R.id.favorite_image_view) ImageView favoriteImage;
+    @BindView(R.id.favorite_text_view) TextView favoriteTextView;
 
     Movie currentMoview = UserData.movie;
-    MovieDBController dbController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +55,62 @@ public class MoviewDetailActivity extends AppCompatActivity {
                 supportFinishAfterTransition();
             }
         });
-        loadView();
-        dbController = new MovieDBController();
+        favoriteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentMoview.setFavorite(!currentMoview.isFavorite());
+                reloadFavorite();
+            }
+        });
+        ArrayList<Movie> movies = new ArrayList<>();
+        try {
+            MovieDBController dbController = MovieDBController.shared()
+                    .beginDataBaseQuery(this)
+                    .getItemById(currentMoview.getId(), movies);
+            if (movies.size() > 0) {
+                currentMoview.setFavorite(movies.get(0).isFavorite());
+            } else {
+                dbController
+                        .putItem(currentMoview);
+            }
+            dbController
+                    .endDataBaseQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        reloadView();
+        reloadFavoriteLocal();
     }
 
-    private void loadView(){
+    private void reloadFavoriteLocal() {
+        if (currentMoview.isFavorite()) {
+            favoriteImage.setImageResource(R.drawable.ic_favorite);
+            favoriteTextView.setText("Remove from favorite");
+        } else {
+            favoriteImage.setImageResource(R.drawable.ic_unfavorite);
+            favoriteTextView.setText("Add to favorite");
+        }
+    }
+
+    private void reloadFavorite() {
+        if (currentMoview.isFavorite()) {
+            favoriteImage.setImageResource(R.drawable.ic_favorite);
+            favoriteTextView.setText("Remove from favorite");
+        } else {
+            favoriteImage.setImageResource(R.drawable.ic_unfavorite);
+            favoriteTextView.setText("Add to favorite");
+        }
+        try {
+            MovieDBController.shared()
+                    .beginDataBaseQuery(this)
+                    .updateItem(currentMoview.getId(), currentMoview.isFavorite())
+                    .endDataBaseQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void reloadView(){
         Picasso.with(MoviewDetailActivity.this)
                 .load(TheMoviewDBAPI.baseImage + currentMoview.getPosterPath())
                 .into(poster);
@@ -75,7 +129,7 @@ public class MoviewDetailActivity extends AppCompatActivity {
         super.onResume();
         if (!currentMoview.equals(UserData.movie)) {
             currentMoview = UserData.movie;
-            loadView();
+            reloadView();
         }
     }
 }

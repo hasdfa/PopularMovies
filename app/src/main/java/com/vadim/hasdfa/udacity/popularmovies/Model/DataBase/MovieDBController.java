@@ -15,17 +15,22 @@ public class MovieDBController {
     private SQLiteDatabase database;
     private Cursor cursor;
 
+    private MovieDBController(){}
+    public static MovieDBController shared(){
+        return new MovieDBController();
+    }
+
     public MovieDBController beginDataBaseQuery(Context context){
         isUpdateBegin = true;
         helper = new DBHelper(context);
         database = helper.getWritableDatabase();
+//        helper.onUpgrade(database, 5, 6);
         return this;
     }
 
     public MovieDBController getAllItems(ArrayList<Movie> movieDBItems) throws Exception {
         if (!isUpdateBegin) throw new Exception("DataBase is not begin updated");
-        movieDBItems = new ArrayList<>();
-        cursor = database.query("SELECT * FROM FavoriteMovies;", null, null, null, null, null, null);
+        cursor = database.rawQuery("SELECT * FROM FavoriteMovies;", null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -35,6 +40,9 @@ public class MovieDBController {
                 m.setPosterPath(cursor.getString(cursor.getColumnIndex("poster_url")));
                 m.setOverview(cursor.getString(cursor.getColumnIndex("overview")));
                 m.setReleaseDate(cursor.getString(cursor.getColumnIndex("date")));
+                m.setFavorite(
+                        cursor.getInt(cursor.getColumnIndex("isFavorite")) != 0
+                );
 
                 movieDBItems.add(m);
             } while (cursor.moveToNext());
@@ -42,11 +50,66 @@ public class MovieDBController {
         return this;
     }
 
-    public MovieDBController putItem(int movieId, String title, String posterUrl, String overview, String date) throws Exception {
+    public MovieDBController getAllFavoriteItems(ArrayList<Movie> movieDBItems) throws Exception {
         if (!isUpdateBegin) throw new Exception("DataBase is not begin updated");
+        cursor = database.rawQuery("SELECT * FROM FavoriteMovies WHERE isFavorite=1;", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Movie m = new Movie();
+                m.setId(cursor.getInt(cursor.getColumnIndex("movie_id")));
+                m.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+                m.setPosterPath(cursor.getString(cursor.getColumnIndex("poster_url")));
+                m.setOverview(cursor.getString(cursor.getColumnIndex("overview")));
+                m.setReleaseDate(cursor.getString(cursor.getColumnIndex("date")));
+                m.setFavorite(
+                        cursor.getInt(cursor.getColumnIndex("isFavorite")) != 0
+                );
+
+                movieDBItems.add(m);
+            } while (cursor.moveToNext());
+        }
+        return this;
+    }
+
+    public MovieDBController getItemById(int movie_id, ArrayList<Movie> movies) throws Exception {
+        if (!isUpdateBegin) throw new Exception("DataBase is not begin updated");
+        cursor = database.rawQuery("SELECT * FROM FavoriteMovies WHERE movie_id = "+movie_id+";", null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Movie m = new Movie();
+                m.setId(cursor.getInt(cursor.getColumnIndex("movie_id")));
+                m.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+                m.setPosterPath(cursor.getString(cursor.getColumnIndex("poster_url")));
+                m.setOverview(cursor.getString(cursor.getColumnIndex("overview")));
+                m.setReleaseDate(cursor.getString(cursor.getColumnIndex("date")));
+                m.setFavorite(
+                        cursor.getInt(cursor.getColumnIndex("isFavorite")) != 0
+                );
+
+                movies.add(m);
+            } while (cursor.moveToNext());
+        }
+        return this;
+    }
+
+    public MovieDBController putItem(Movie m) throws Exception {
+        if (!isUpdateBegin) throw new Exception("DataBase is not begin updated");
+        int favorite = m.isFavorite() ? 1 : 0;
         database
-                .execSQL("INSERT OR REPLACE INTO FavoriteMovies (movie_id, title, poster_url, overview, date)\n" +
-                        "VALUES (\""+movieId+"\",\""+title+"\",\""+posterUrl+"\",\""+overview+"\",\""+date+"\");");
+                .execSQL("INSERT OR REPLACE INTO FavoriteMovies (movie_id, title, isFavorite, poster_url, overview, date)\n" +
+                        "VALUES (\""+m.getId()+"\",\""+m.getTitle()+"\",\""+favorite+"\",\""+m.getPosterPath()+"\",\""+m.getOverview()+"\",\""+m.getReleaseDate()+"\");");
+        return this;
+    }
+
+    public MovieDBController updateItem(int movie_id, boolean isFavorite) throws Exception {
+        if (!isUpdateBegin) throw new Exception("DataBase is not begin updated");
+        int favorite = isFavorite ? 1 : 0;
+        database
+                .execSQL("UPDATE FavoriteMovies \n" +
+                        "SET isFavorite=\"" + favorite + "\"\n" +
+                        "WHERE movie_id=\""+movie_id+"\";");
         return this;
     }
 

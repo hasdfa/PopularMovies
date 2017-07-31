@@ -141,5 +141,49 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"/>
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/favorite_button"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/blured_image_view"
+            app:layout_constraintLeft_toRightOf="@+id/poster_image_view"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <RelativeLayout
+                android:background="#77FFC107"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/favorite_image_view"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="8dp"
+                    android:contentDescription="@string/favorite_icon"
+                    app:srcCompat="@drawable/ic_unfavorite" />
+
+                <TextView
+                    android:id="@+id/favorite_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toStartOf="@id/favorite_image_view"
+                    android:gravity="center"
+                    android:text="@string/add_to_favorite"
+                    android:textColor="@android:color/white" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

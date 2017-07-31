@@ -50,13 +50,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         final Movie movie = movies.get(position);
 
         String imgUrl = TheMoviewDBAPI.baseImage + movie.getPosterPath();
-        Log.d("myLog", imgUrl);
+        Log.d("myLog", "imgURL: " + imgUrl);
         Picasso.with(holder.thumbnail.getContext())
             .load(imgUrl)
                 .into(holder.thumbnail);
         holder.title.setText(movie.getTitle());
+        Log.d("myLog", "movie.getTitle(): " + movie.getTitle());
         holder.rateStars.setText(movie.getVoteAverage() + "");
-        Log.d("myLog", "Overview: " + movie.getOverview());
+        Log.d("myLog", "movie.getVoteAverage(): " + movie.getVoteAverage());
 
         final View transitionComponent1 = holder.thumbnail;
         final View transitionComponent2 = holder.rateStars;
@@ -94,6 +95,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     public void notifyDataSetChanged(ArrayList<Movie> movies){
         this.movies.addAll(movies);
         notifyDataSetChanged();
+    }
+
+    public void reload(ArrayList<Movie> movies) {
+        this.movies = movies;
+        this.notifyDataSetChanged();
     }
 
     public void reload() {
