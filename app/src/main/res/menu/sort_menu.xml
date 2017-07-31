@@ -8,14 +8,14 @@
         android:id="@+id/sort_main">
         <menu>
             <item
-                android:checkable="true"
-                android:title="@string/top_rated"
-                android:id="@+id/sort_topRated"/>
-            <item
                 android:checked="true"
                 android:checkable="true"
                 android:title="@string/popular"
                 android:id="@+id/sort_popular"/>
+            <item
+                android:checkable="true"
+                android:title="@string/top_rated"
+                android:id="@+id/sort_topRated"/>
         </menu>
     </item>
 </menu>
