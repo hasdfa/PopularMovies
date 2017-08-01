@@ -57,21 +57,21 @@ public class MovieDBController {
     public MovieDBController getAllItems(ArrayList<Movie> movies) throws Exception {
         if (!isUpdateBegin) throw new Exception("DataBase is not begin updated");
         cursor = database.rawQuery("SELECT * FROM FavoriteMovies;", null);
-        getFromDB(movies);
+        getFromDB(movies, cursor);
         return this;
     }
 
     public MovieDBController getAllFavoriteItems(ArrayList<Movie> movies) throws Exception {
         if (!isUpdateBegin) throw new Exception("DataBase is not begin updated");
         cursor = database.rawQuery("SELECT * FROM FavoriteMovies WHERE isFavorite=1;", null);
-        getFromDB(movies);
+        getFromDB(movies, cursor);
         return this;
     }
 
     public MovieDBController getItemById(int movie_id, ArrayList<Movie> movies) throws Exception {
         if (!isUpdateBegin) throw new Exception("DataBase is not begin updated");
         cursor = database.rawQuery("SELECT * FROM FavoriteMovies WHERE movie_id = "+movie_id+";", null);
-        getFromDB(movies);
+        getFromDB(movies, cursor);
         return this;
     }
 
@@ -86,7 +86,7 @@ public class MovieDBController {
                         sortOrder);
     }
 
-    private void getFromDB(ArrayList<Movie> movies){
+    public void getFromDB(ArrayList<Movie> movies, Cursor cursor){
         if (cursor.moveToFirst()) {
             do {
                 Movie m = new Movie();

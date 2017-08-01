@@ -1,9 +1,12 @@
 package com.vadim.hasdfa.udacity.popularmovies.Controllers.DetailMovie;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -70,12 +73,24 @@ public class MoviewDetailActivity extends AppCompatActivity {
         });
         ArrayList<Movie> movies = new ArrayList<>();
         try {
+            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
+            Cursor c = getContentResolver().query(queryUri, null, null, null, null);
+            ArrayList<Movie> moviesWhatIHate = new ArrayList<>();
+            MovieDBController.shared().getFromDB(moviesWhatIHate, c);
+            Log.d("myLog", "ContentProviderItems: " + moviesWhatIHate);
+            if (c != null && !c.isClosed()) c.close();
+
+
             MovieDBController dbController = MovieDBController.shared()
                     .beginDataBaseQuery(this)
                     .getItemById(currentMoview.getId(), movies);
             if (movies.size() > 0) {
                 currentMoview.setFavorite(movies.get(0).isFavorite());
             } else {
+//                ContentValues cv = new ContentValues();
+//                put data in ContentProvider
+//                getContentResolver().insert(queryUri, cv);
+
                 dbController
                         .putItem(currentMoview);
             }

@@ -35,6 +35,10 @@ public class MovieMainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         final LinearLayoutManager lManager = new GridLayoutManager(this, 2);
+        if (savedInstanceState != null) {
+            GridLayoutManager llm = (GridLayoutManager) mRecyclerView.getLayoutManager();
+            llm.onRestoreInstanceState(savedInstanceState.getParcelable("llm"));
+        }
         mRecyclerView.setLayoutManager(lManager);
 
         mAdapter = new MoviesAdapter(new ArrayList<Movie>(), this);
@@ -144,21 +148,36 @@ public class MovieMainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
         outState.putString("udName", UserData.sortType.name());
+
+        GridLayoutManager glm = (GridLayoutManager) mRecyclerView.getLayoutManager();
+        outState.putParcelable("llm", glm.onSaveInstanceState());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
         String sortType = savedInstanceState.getString("udName");
 
+        GridLayoutManager glm = (GridLayoutManager) mRecyclerView.getLayoutManager();
+        glm.onRestoreInstanceState(savedInstanceState.getParcelable("llm"));
+
+        NetworkUtils.page = 1;
         if (sortType != null) {
             if (sortType.equals(UserData.SortType.favorite.name())) {
                 checkOnRestore(UserData.SortType.favorite);
+                favorite.setChecked(true);
+                topRated.setChecked(false);
+                popular.setChecked(false);
             } else if (sortType.equals(UserData.SortType.topRated.name())) {
                 checkOnRestore(UserData.SortType.topRated);
+                favorite.setChecked(false);
+                topRated.setChecked(false);
+                popular.setChecked(true);
             } else if (sortType.equals(UserData.SortType.popular.name())) {
                 checkOnRestore(UserData.SortType.popular);
+                favorite.setChecked(false);
+                topRated.setChecked(false);
+                popular.setChecked(true);
             }
         }
     }
