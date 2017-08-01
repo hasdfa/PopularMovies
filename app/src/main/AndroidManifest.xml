@@ -24,6 +24,11 @@
         <activity
             android:name=".Controllers.DetailMovie.MoviewDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <provider
+            android:authorities="com.vadim.hasdfa.udacity.popularmovies"
+            android:name=".Model.DataBase.ContentProvider.TestContentProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

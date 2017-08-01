@@ -1,24 +1,50 @@
 package com.vadim.hasdfa.udacity.popularmovies.Model.DataBase;
 
 import android.content.Context;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
 import com.vadim.hasdfa.udacity.popularmovies.Model.Movie;
 
 import java.util.ArrayList;
 
 public class MovieDBController {
+    public static final String TABLE_NAME = "FavoriteMovies";
+    public static final String AUTHORITY = "com.vadim.hasdfa.udacity.popularmovies";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://"+AUTHORITY);
+    public static final String MOVIES_PATH = "movies";
+    public static final Uri CONTENT_URI =  BASE_CONTENT_URI
+            .buildUpon()
+            .appendPath(MOVIES_PATH)
+            .build();
+
+    public static final int MOVIES = 500;
+    public static final int MOVIES_WITH_ID = 501;
+    public static final int MOVIES_WITH_mID = 502;
+    public static final UriMatcher sUriMathcer = buildUriMathcer();
+    private static UriMatcher buildUriMathcer(){
+        UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+        matcher.addURI(AUTHORITY, MOVIES_PATH, MOVIES);
+        matcher.addURI(AUTHORITY, MOVIES_PATH + "/#", MOVIES_WITH_ID);
+        matcher.addURI(AUTHORITY, MOVIES_PATH + "/m", MOVIES_WITH_mID);
+        return matcher;
+    }
+
     private boolean isUpdateBegin = false;
 
     private DBHelper helper;
     private SQLiteDatabase database;
     private Cursor cursor;
+    private Context context;
 
     private MovieDBController(){}
     public static MovieDBController shared(){
         return new MovieDBController();
     }
+
 
     public MovieDBController beginDataBaseQuery(Context context){
         isUpdateBegin = true;
@@ -47,6 +73,17 @@ public class MovieDBController {
         cursor = database.rawQuery("SELECT * FROM FavoriteMovies WHERE movie_id = "+movie_id+";", null);
         getFromDB(movies);
         return this;
+    }
+
+    public Cursor queryDatabase(String[] projection, String selection, String[] selectionArgs, String sortOrder){
+        return database
+                .query(TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
     }
 
     private void getFromDB(ArrayList<Movie> movies){
@@ -105,5 +142,14 @@ public class MovieDBController {
         database = null;
         isUpdateBegin = false;
         return this;
+    }
+
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }
