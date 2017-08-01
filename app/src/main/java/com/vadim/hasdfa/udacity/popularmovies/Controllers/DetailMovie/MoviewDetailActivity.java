@@ -1,5 +1,6 @@
 package com.vadim.hasdfa.udacity.popularmovies.Controllers.DetailMovie;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -75,27 +76,36 @@ public class MoviewDetailActivity extends AppCompatActivity {
         try {
             Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
             Cursor c = getContentResolver().query(queryUri, null, null, null, null);
-            ArrayList<Movie> moviesWhatIHate = new ArrayList<>();
-            MovieDBController.shared().getFromDB(moviesWhatIHate, c);
-            Log.d("myLog", "ContentProviderItems: " + moviesWhatIHate);
+            MovieDBController.shared().getFromDB(movies, c);
+            Log.d("myLog", "ContentProviderItems: " + movies);
             if (c != null && !c.isClosed()) c.close();
 
 
-            MovieDBController dbController = MovieDBController.shared()
-                    .beginDataBaseQuery(this)
-                    .getItemById(currentMoview.getId(), movies);
+//            MovieDBController dbController = MovieDBController.shared()
+//                    .beginDataBaseQuery(this)
+//                    .getItemById(currentMoview.getId(), movies);
             if (movies.size() > 0) {
                 currentMoview.setFavorite(movies.get(0).isFavorite());
             } else {
-//                ContentValues cv = new ContentValues();
-//                put data in ContentProvider
-//                getContentResolver().insert(queryUri, cv);
+                ContentValues cv = new ContentValues();
+                //        database.execSQL("INSERT OR REPLACE INTO FavoriteMovies (movie_id, title, isFavorite, poster_url, overview, date, blur_poster_url, rate)\n" +
+                //        "VALUES (\""+m.getId()+"\",\""+m.getTitle()+"\",\""+favorite+"\",\""+m.getPosterPath()+"\",\""+m.getOverview()+"\",\""+m.getReleaseDate()+"\",\""+m.getBackdropPath()+"\",\""+m.getVoteAverage()+"\");");
 
-                dbController
-                        .putItem(currentMoview);
+                cv.put("movie_id", currentMoview.getId());
+                cv.put("title", currentMoview.getTitle());
+                cv.put("isFavorite", currentMoview.isFavorite() ? 1 : 0);
+                cv.put("poster_url", currentMoview.getPosterPath());
+                cv.put("overview", currentMoview.getOverview());
+                cv.put("date", currentMoview.getReleaseDate());
+                cv.put("blur_poster_url", currentMoview.getBackdropPath());
+                cv.put("rate", currentMoview.getVoteAverage());
+                getContentResolver().insert(queryUri, cv);
+
+//                dbController
+//                        .putItem(currentMoview);
             }
-            dbController
-                    .endDataBaseQuery();
+//            dbController
+//                    .endDataBaseQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }
