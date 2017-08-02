@@ -19,7 +19,10 @@ import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.TheMoviewDBAPI.*;
+import static com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.TheMoviewDBAPI.base;
+import static com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.TheMoviewDBAPI.key;
+import static com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.TheMoviewDBAPI.popular;
+import static com.vadim.hasdfa.udacity.popularmovies.Model.NetworksUtils.TheMoviewDBAPI.topRated;
 
 /**
  * Created by Raksha Vadim on 29.07.17, 21:53.

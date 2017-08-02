@@ -1,10 +1,13 @@
 package com.vadim.hasdfa.udacity.popularmovies.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Raksha Vadim on 29.07.17, 22:06.
  */
 
-public class Movie {
+public class Movie implements Parcelable {
     private String posterPath;
     private boolean adult;
     private String overview;
@@ -19,6 +22,38 @@ public class Movie {
     private String video;
     private double voteAverage;
     private boolean isFavorite = false;
+
+    public Movie() {
+
+    }
+    protected Movie(Parcel in) {
+        posterPath = in.readString();
+        adult = in.readByte() != 0;
+        overview = in.readString();
+        releaseDate = in.readString();
+        id = in.readInt();
+        originalTitle = in.readString();
+        originalLanguage = in.readString();
+        title = in.readString();
+        backdropPath = in.readString();
+        popularity = in.readDouble();
+        voteCount = in.readInt();
+        video = in.readString();
+        voteAverage = in.readDouble();
+        isFavorite = in.readByte() != 0;
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     @Override
     public boolean equals(Object obj) {
@@ -46,7 +81,7 @@ public class Movie {
 
     @Override
     public String toString() {
-        return title;
+        return title + ";isFavorite:"+isFavorite;
     }
 
     public String getPosterPath() {
@@ -159,5 +194,28 @@ public class Movie {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(posterPath);
+        parcel.writeByte((byte) (adult ? 1 : 0));
+        parcel.writeString(overview);
+        parcel.writeString(releaseDate);
+        parcel.writeInt(id);
+        parcel.writeString(originalTitle);
+        parcel.writeString(originalLanguage);
+        parcel.writeString(title);
+        parcel.writeString(backdropPath);
+        parcel.writeDouble(popularity);
+        parcel.writeInt(voteCount);
+        parcel.writeString(video);
+        parcel.writeDouble(voteAverage);
+        parcel.writeByte((byte) (isFavorite ? 1 : 0));
     }
 }

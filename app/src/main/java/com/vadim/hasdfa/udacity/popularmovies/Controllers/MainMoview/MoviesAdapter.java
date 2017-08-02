@@ -93,21 +93,40 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
     }
 
     public void notifyDataSetChanged(ArrayList<Movie> movies){
-        this.movies.addAll(movies);
+        if (this.movies != null) {
+            this.movies.addAll(movies);
+        } else {
+            this.movies = movies;
+        }
         notifyDataSetChanged();
     }
 
-    public void reload(ArrayList<Movie> movies) {
+    void reload(ArrayList<Movie> movies) {
         this.movies = movies;
         this.notifyDataSetChanged();
     }
 
-    public void reload() {
+    void reload() {
         this.movies = new ArrayList<>();
         NetworkUtils.page = 1;
         new NetworkUtils(this)
                 .loadMore();
         this.notifyDataSetChanged();
+    }
+
+    private static final String key = "movies_array_list";
+    void onRestoreInstanceState(Bundle savedInstanceState) {
+        NetworkUtils.page = savedInstanceState.getInt("page");
+        movies = new ArrayList<>();
+        movies = savedInstanceState.getParcelableArrayList(key);
+        Log.d("myLog", "Adapter:onRestoreInstanceState - array: " + movies);
+        notifyDataSetChanged();
+    }
+
+    void onSavedInstance(Bundle outState) {
+        outState.putInt("page", NetworkUtils.page);
+        outState.putParcelableArrayList(key, movies);
+        Log.d("myLog", "Adapter:onSavedInstance - array: " + movies);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

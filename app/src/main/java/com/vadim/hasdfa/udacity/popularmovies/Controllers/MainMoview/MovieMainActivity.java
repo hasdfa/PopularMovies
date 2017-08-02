@@ -1,7 +1,7 @@
 package com.vadim.hasdfa.udacity.popularmovies.Controllers.MainMoview;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,11 +34,10 @@ public class MovieMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_main);
         ButterKnife.bind(this);
 
+//        DBHelper dbHelper = new DBHelper(this);
+//        dbHelper.onUpgrade(dbHelper.getWritableDatabase(), 8, 9);
+
         final LinearLayoutManager lManager = new GridLayoutManager(this, 2);
-        if (savedInstanceState != null) {
-            GridLayoutManager llm = (GridLayoutManager) mRecyclerView.getLayoutManager();
-            llm.onRestoreInstanceState(savedInstanceState.getParcelable("llm"));
-        }
         mRecyclerView.setLayoutManager(lManager);
 
         mAdapter = new MoviesAdapter(new ArrayList<Movie>(), this);
@@ -49,10 +48,9 @@ public class MovieMainActivity extends AppCompatActivity {
 
         ArrayList<Movie> movies = new ArrayList<>();
         try {
+            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
             MovieDBController.shared()
-                    .beginDataBaseQuery(this)
-                    .getAllItems(movies)
-                    .endDataBaseQuery();
+                    .getFromDB(movies, getContentResolver().query(queryUri, null, null, null, null));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,7 +69,7 @@ public class MovieMainActivity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 int totalItemCount = lManager.getItemCount();
                 int lastVisibleItem = lManager.findLastVisibleItemPosition();
-                if (!NetworkUtils.isLoading && totalItemCount <= (lastVisibleItem + 5) && UserData.sortType != UserData.SortType.favorite) {
+                if (!NetworkUtils.isLoading && totalItemCount <= (lastVisibleItem + 2) && UserData.sortType != UserData.SortType.favorite) {
                     new NetworkUtils(mAdapter)
                             .incrementPage();
                     NetworkUtils.isLoading = true;
@@ -133,10 +131,9 @@ public class MovieMainActivity extends AppCompatActivity {
     private void reloadAdapterForFavorite(){
         ArrayList<Movie> moviesFromDb = new ArrayList<>();
         try {
+            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
             MovieDBController.shared()
-                    .beginDataBaseQuery(this)
-                    .getAllFavoriteItems(moviesFromDb)
-                    .endDataBaseQuery();
+                    .getFromDB(moviesFromDb, getContentResolver().query(queryUri, null, "isFavorite=1", null, null));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -145,39 +142,43 @@ public class MovieMainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mAdapter.onSavedInstance(outState);
+
         outState.putString("udName", UserData.sortType.name());
 
         GridLayoutManager glm = (GridLayoutManager) mRecyclerView.getLayoutManager();
         outState.putParcelable("llm", glm.onSaveInstanceState());
+
+        mAdapter.onSavedInstance(outState);
+
+        outState.putInt("scrollPosition", glm.findFirstVisibleItemPosition());
+        Log.d("myLog", "onSaveInstanceState");
     }
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         String sortType = savedInstanceState.getString("udName");
 
-        GridLayoutManager glm = (GridLayoutManager) mRecyclerView.getLayoutManager();
-        glm.onRestoreInstanceState(savedInstanceState.getParcelable("llm"));
+        mAdapter.onRestoreInstanceState(savedInstanceState);
+
+        GridLayoutManager llm = (GridLayoutManager) mRecyclerView.getLayoutManager();
+        llm.onRestoreInstanceState(savedInstanceState.getParcelable("llm"));
+
+        int position = savedInstanceState.getInt("scrollPosition");
+        llm.scrollToPosition(position);
 
         NetworkUtils.page = 1;
         if (sortType != null) {
             if (sortType.equals(UserData.SortType.favorite.name())) {
                 checkOnRestore(UserData.SortType.favorite);
-                favorite.setChecked(true);
-                topRated.setChecked(false);
-                popular.setChecked(false);
             } else if (sortType.equals(UserData.SortType.topRated.name())) {
                 checkOnRestore(UserData.SortType.topRated);
-                favorite.setChecked(false);
-                topRated.setChecked(false);
-                popular.setChecked(true);
             } else if (sortType.equals(UserData.SortType.popular.name())) {
                 checkOnRestore(UserData.SortType.popular);
-                favorite.setChecked(false);
-                topRated.setChecked(false);
-                popular.setChecked(true);
             }
         }
     }

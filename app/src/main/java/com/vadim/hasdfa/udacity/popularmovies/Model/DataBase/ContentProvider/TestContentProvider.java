@@ -125,6 +125,7 @@ public class TestContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        return db.update(TABLE_NAME, values, "movie_id=?", new String[] { values.getAsString("movie_id") });
     }
 }

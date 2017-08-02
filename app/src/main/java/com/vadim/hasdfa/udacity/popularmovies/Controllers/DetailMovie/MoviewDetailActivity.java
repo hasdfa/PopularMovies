@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.vadim.hasdfa.udacity.popularmovies.Model.DataBase.MovieDBController;
@@ -74,23 +75,15 @@ public class MoviewDetailActivity extends AppCompatActivity {
         });
         ArrayList<Movie> movies = new ArrayList<>();
         try {
-            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
-            Cursor c = getContentResolver().query(queryUri, null, null, null, null);
+            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies/#"+currentMoview.getId());
+            Cursor c = getContentResolver().query(queryUri, null, "movie_id=?", new String[]{currentMoview.getId()+""}, null);
             MovieDBController.shared().getFromDB(movies, c);
             Log.d("myLog", "ContentProviderItems: " + movies);
             if (c != null && !c.isClosed()) c.close();
-
-
-//            MovieDBController dbController = MovieDBController.shared()
-//                    .beginDataBaseQuery(this)
-//                    .getItemById(currentMoview.getId(), movies);
             if (movies.size() > 0) {
                 currentMoview.setFavorite(movies.get(0).isFavorite());
             } else {
                 ContentValues cv = new ContentValues();
-                //        database.execSQL("INSERT OR REPLACE INTO FavoriteMovies (movie_id, title, isFavorite, poster_url, overview, date, blur_poster_url, rate)\n" +
-                //        "VALUES (\""+m.getId()+"\",\""+m.getTitle()+"\",\""+favorite+"\",\""+m.getPosterPath()+"\",\""+m.getOverview()+"\",\""+m.getReleaseDate()+"\",\""+m.getBackdropPath()+"\",\""+m.getVoteAverage()+"\");");
-
                 cv.put("movie_id", currentMoview.getId());
                 cv.put("title", currentMoview.getTitle());
                 cv.put("isFavorite", currentMoview.isFavorite() ? 1 : 0);
@@ -100,12 +93,7 @@ public class MoviewDetailActivity extends AppCompatActivity {
                 cv.put("blur_poster_url", currentMoview.getBackdropPath());
                 cv.put("rate", currentMoview.getVoteAverage());
                 getContentResolver().insert(queryUri, cv);
-
-//                dbController
-//                        .putItem(currentMoview);
             }
-//            dbController
-//                    .endDataBaseQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,10 +130,14 @@ public class MoviewDetailActivity extends AppCompatActivity {
             favoriteTextView.setText("Add to favorite");
         }
         try {
-            MovieDBController.shared()
-                    .beginDataBaseQuery(this)
-                    .updateItem(currentMoview.getId(), currentMoview.isFavorite())
-                    .endDataBaseQuery();
+            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
+            ContentValues cv = new ContentValues();
+            cv.put("movie_id", currentMoview.getId());
+            cv.put("isFavorite", currentMoview.isFavorite() ? 1 : 0);
+            int update = getContentResolver().update(
+                    queryUri, cv, null, null
+            );
+            Toast.makeText(this, "Updated: " + update, Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -161,7 +153,7 @@ public class MoviewDetailActivity extends AppCompatActivity {
                 .into(blured);
         title.setText(currentMoview.getTitle());
         date.setText(currentMoview.getReleaseDate());
-        rate.setText(currentMoview.getVoteAverage()+"");
+        rate.setText(""+currentMoview.getVoteAverage());
         overview.setText(currentMoview.getOverview());
     }
 
