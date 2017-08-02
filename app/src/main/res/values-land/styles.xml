@@ -11,7 +11,7 @@
 
     <style name="AppTheme.NoActionBar">
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">false</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">#00000000</item>
+        <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>
