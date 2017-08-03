@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.vadim.hasdfa.udacity.popularmovies">
+    package="com.vadim.hasdfa.udacity.favorite_movies">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -9,25 +9,26 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Controllers.MainMoview.MovieMainActivity">
+            android:name="com.vadim.hasdfa.udacity.favorite_movies.Controllers.MainMoview.MovieMainActivity"
+            android:theme="@style/AppTheme.MainNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".Controllers.DetailMovie.MoviewDetailActivity"
+            android:name="com.vadim.hasdfa.udacity.favorite_movies.Controllers.DetailMovie.MoviewDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <provider
-            android:authorities="com.vadim.hasdfa.udacity.popularmovies"
-            android:name=".Model.DataBase.ContentProvider.TestContentProvider"
+            android:authorities="com.vadim.hasdfa.udacity.favorite_movies"
+            android:name="com.vadim.hasdfa.udacity.favorite_movies.Model.DataBase.ContentProvider.TestContentProvider"
             android:exported="false"/>
     </application>
 

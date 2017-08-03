@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "838429031745",
+    "firebase_url": "https://myfavoritemovies-438a5.firebaseio.com",
+    "project_id": "myfavoritemovies-438a5",
+    "storage_bucket": "myfavoritemovies-438a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838429031745:android:e428ffe71a3fdb4f",
+        "android_client_info": {
+          "package_name": "com.vadim.hasdfa.udacity.favorite_movies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838429031745-p83309qhjkegr2fnfu6rv84l5s3dpvij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBw3dghUQTo8_Xjhg28-mcNf7-1qNn8jNU"
+        },
+        {
+          "current_key": "AIzaSyCdHvseHdOSNTg0pL4Up7_Lhm6D6UBo834"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,24 +7,30 @@
     android:background="@android:color/white"
     android:layout_height="match_parent">
     <android.support.v4.widget.NestedScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:background="@android:color/white"
         android:layout_height="match_parent">
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:targetApi="lollipop">
             <ImageView
-                android:minHeight="250dp"
-                android:maxHeight="350dp"
                 android:id="@+id/blured_image_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:contentDescription="@string/bluredbackground"
                 android:scaleType="centerCrop"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/deadpool_example"/>
+                tools:src="@drawable/deadpool_example"
+                app:layout_constraintVertical_bias="0.0"
+                android:minHeight="240dp"/>
 
             <ImageView
                 android:id="@+id/poster_image_view"
@@ -35,7 +41,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="32dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/movie_image"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -130,26 +136,23 @@
                 tools:text="10" />
 
             <android.support.v7.widget.CardView
-                android:maxWidth="100dp"
-                android:maxHeight="64dp"
-                android:minHeight="50dp"
                 android:id="@+id/favorite_button"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginBottom="32dp"
                 android:clickable="true"
                 android:foreground="?attr/selectableItemBackground"
+                android:maxHeight="64dp"
+                android:maxWidth="50dp"
+                android:minHeight="50dp"
                 app:cardCornerRadius="4dp"
                 app:cardElevation="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/blured_image_view"
                 app:layout_constraintLeft_toRightOf="@+id/poster_image_view"
                 app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/blured_image_view"
-                app:layout_constraintHorizontal_bias="0.0"
-                tools:layout_editor_absoluteY="240dp">
+                tools:layout_editor_absoluteY="232dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -175,6 +178,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_toStartOf="@id/favorite_image_view"
                         android:gravity="center"
+                        android:textSize="21sp"
                         android:text="@string/add_to_favorite"
                         android:textColor="@android:color/white" />
                 </RelativeLayout>
@@ -198,19 +202,17 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 
-
     <ImageButton
         android:id="@+id/backArrow"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:contentDescription="@string/backbutton"
+        android:clickable="true"
         android:adjustViewBounds="true"
         android:background="@drawable/ic_circle"
-        android:clickable="true"
-        android:contentDescription="@string/backbutton"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        app:srcCompat="@drawable/ic_arrow"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_arrow" />
-
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"/>
 </RelativeLayout>

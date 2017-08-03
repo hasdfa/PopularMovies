@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="api_key">85c2e118721d84b2de72e43e7fdb18ba</string>
+    <string name="ad_mob">ca-app-pub-8285809783573127~6778429257</string>
+    <string name="ad_block_big">ca-app-pub-8285809783573127/6795752888</string>
 </resources>

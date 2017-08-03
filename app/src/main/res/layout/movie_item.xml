@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
+            android:maxHeight="250dp"
             android:contentDescription="@string/movie_image"
             tools:src="@drawable/deadpool_example"
             android:layout_alignParentTop="true"

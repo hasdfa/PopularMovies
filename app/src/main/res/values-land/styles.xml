@@ -9,6 +9,11 @@
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">false</item>
     </style>
 
+    <style name="AppTheme.MainNoActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">false</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
