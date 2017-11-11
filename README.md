@@ -3,6 +3,9 @@
 
 <table>
     <tr>
+        <td colspan="2"><img src="imgs/FavoriteMovies.png"></td>
+    </tr>
+    <tr>
         <td><img src="https://lh3.googleusercontent.com/l6RnkEPSGQZ3JSkNdy0sPUAF895zv7GsT44EvmeSF8ndhQIeQ4tbXAxQBDxKIwYVSJw=h900"></td>
         <td><img src="https://lh3.googleusercontent.com/o9UaUe1U2v739UIczIVBoV_WsH5Y2-V8SOpjziHWgJeNkFnsiImaflNEdcn3g1a20zIr=h900"></td>
     </tr>
