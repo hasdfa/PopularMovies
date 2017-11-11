@@ -42,8 +42,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         return NetworkUtils.page * 3;
     }
 
-
-    private static final String ADMOB_AD_UNIT_ID_MID = "ca-app-pub-8285809783573127/1454140331";
     private static final String ADMOB_AD_UNIT_ID_BIG = "ca-app-pub-8285809783573127/6795752888";
 
     public MoviesAdapter(ArrayList<Movie> movies, Context context){

@@ -2,7 +2,6 @@ package com.vadim.hasdfa.udacity.favorite_movies.Controllers.MainMoview;
 
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -48,6 +47,7 @@ public class MovieMainActivity extends AppCompatActivity {
 
     MoviesAdapter mAdapter;
 
+
     private static final String ADMOB_APP_ID = "ca-app-pub-8285809783573127~6778429257";
 
     private OnLoadCompleteListener mNetworkLoader = new OnLoadCompleteListener() {
@@ -78,24 +78,12 @@ public class MovieMainActivity extends AppCompatActivity {
         loadingView.setVisibility(View.VISIBLE);
         new NetworkUtils(mNetworkLoader).loadMore();
 
-        ArrayList<Movie> movies = new ArrayList<>();
-        try {
-            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
-            MovieDBController.shared()
-                    .getFromDB(movies, getContentResolver().query(queryUri, null, null, null, null));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.d("myLog", "Movies in db: " + movies);
-
-
         // Add
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
             }
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -181,9 +169,10 @@ public class MovieMainActivity extends AppCompatActivity {
     private void reloadAdapterForFavorite(){
         ArrayList<Movie> moviesFromDb = new ArrayList<>();
         try {
-            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
             MovieDBController.shared()
-                    .getFromDB(moviesFromDb, getContentResolver().query(queryUri, null, "isFavorite=1", null, null));
+                    .beginDataBaseQuery(this)
+                    .getAllFavoriteItems(moviesFromDb)
+                    .endDataBaseQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }

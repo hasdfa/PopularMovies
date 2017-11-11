@@ -1,13 +1,9 @@
 package com.vadim.hasdfa.udacity.favorite_movies.Controllers.DetailMovie;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -76,25 +72,25 @@ public class MoviewDetailActivity extends AppCompatActivity {
         });
         ArrayList<Movie> movies = new ArrayList<>();
         try {
-            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies/#"+currentMoview.getId());
-            Cursor c = getContentResolver().query(queryUri, null, "movie_id=?", new String[]{currentMoview.getId()+""}, null);
-            MovieDBController.shared().getFromDB(movies, c);
-            Log.d("myLog", "ContentProviderItems: " + movies);
-            if (c != null && !c.isClosed()) c.close();
+            MovieDBController db = MovieDBController.shared()
+                    .beginDataBaseQuery(this)
+                    .getItemById(currentMoview.getId(), movies);
             if (movies.size() > 0) {
                 currentMoview.setFavorite(movies.get(0).isFavorite());
             } else {
-                ContentValues cv = new ContentValues();
-                cv.put("movie_id", currentMoview.getId());
-                cv.put("title", currentMoview.getTitle());
-                cv.put("isFavorite", currentMoview.isFavorite() ? 1 : 0);
-                cv.put("poster_url", currentMoview.getPosterPath());
-                cv.put("overview", currentMoview.getOverview());
-                cv.put("date", currentMoview.getReleaseDate());
-                cv.put("blur_poster_url", currentMoview.getBackdropPath());
-                cv.put("rate", currentMoview.getVoteAverage());
-                getContentResolver().insert(queryUri, cv);
+                Movie nMovie = new Movie();
+                nMovie.setId(currentMoview.getId());
+                nMovie.setTitle(currentMoview.getTitle());
+                nMovie.setFavorite(currentMoview.isFavorite());
+                nMovie.setPosterPath(currentMoview.getPosterPath());
+                nMovie.setOverview(currentMoview.getOverview());
+                nMovie.setReleaseDate(currentMoview.getReleaseDate());
+                nMovie.setBackdropPath(currentMoview.getBackdropPath());
+                nMovie.setVoteAverage(currentMoview.getVoteAverage());
+
+                db.putItem(nMovie);
             }
+            db.endDataBaseQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,13 +132,10 @@ public class MoviewDetailActivity extends AppCompatActivity {
             favoriteTextView.setText("Add to favorite");
         }
         try {
-            Uri queryUri = Uri.parse("content://com.vadim.hasdfa.udacity.popularmovies/movies");
-            ContentValues cv = new ContentValues();
-            cv.put("movie_id", currentMoview.getId());
-            cv.put("isFavorite", currentMoview.isFavorite() ? 1 : 0);
-            int update = getContentResolver().update(
-                    queryUri, cv, null, null
-            );
+            MovieDBController.shared()
+                    .beginDataBaseQuery(this)
+                    .updateItem(currentMoview.getId(), currentMoview.isFavorite())
+                    .endDataBaseQuery();
         } catch (Exception e) {
             e.printStackTrace();
         }
