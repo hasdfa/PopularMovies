@@ -3,7 +3,7 @@
 
 <table>
     <tr>
-        <td colspan="2"><img src="imgs/FavoriteMovies.png"></td>
+        <td colspan="2"><img stylr="width: 100%;" src="imgs/FavoriteMovies.png"></td>
     </tr>
     <tr>
         <td><img src="https://lh3.googleusercontent.com/l6RnkEPSGQZ3JSkNdy0sPUAF895zv7GsT44EvmeSF8ndhQIeQ4tbXAxQBDxKIwYVSJw=h900"></td>
