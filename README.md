@@ -3,7 +3,7 @@
 
 <table>
     <tr>
-        <td colspan="2"><img style="min-width: 100%;" src="imgs/FavoriteMovies.png"></td>
+        <td colspan="2"><a href="https://play.google.com/store/apps/details?id=com.vadim.hasdfa.udacity.favorite_movies"><img style="min-width: 100%;" src="imgs/FavoriteMovies.png"></a></td>
     </tr>
     <tr>
         <td><img src="https://lh3.googleusercontent.com/l6RnkEPSGQZ3JSkNdy0sPUAF895zv7GsT44EvmeSF8ndhQIeQ4tbXAxQBDxKIwYVSJw=h900"></td>
